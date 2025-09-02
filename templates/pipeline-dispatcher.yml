@@ -21,7 +21,7 @@ resources:
     #     name: ${{ repo.name }}
     #     ref: ${{ repo.ref }}
 
-extends:
-  template: templates/main.yml@PipelineCommon
-  parameters:
-    configuration: ${{ parameters.configuration }}
+# extends:
+#   template: templates/main.yml@PipelineCommon
+#   parameters:
+#     configuration: ${{ parameters.configuration }}
