@@ -12,7 +12,8 @@ resources:
       type: github
       endpoint: wesley-trust
       name: wesley-trust/pipeline-common
-      ref: ${{ parameters.pipelineCommonRef }}
+      #ref: ${{ parameters.pipelineCommonRef }}
+      ref: 'refs/heads/main'
     # Additional repositories declared via settings configuration.additionalRepositories
     # - ${{ each repo in parameters.configuration.additionalRepositories }}:
     #   - repository: ${{ repo.alias }}
