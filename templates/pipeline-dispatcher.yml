@@ -2,9 +2,6 @@ parameters:
   - name: configuration
     type: object
     default: {}
-  - name: pipelineCommonRef
-    type: string
-    default: 'refs/heads/main'
 
 resources:
   repositories:
@@ -12,16 +9,9 @@ resources:
       type: github
       endpoint: wesley-trust
       name: wesley-trust/pipeline-common
-      ref: ${{ parameters.pipelineCommonRef }}
-      #ref: 'refs/heads/main'
-    # Additional repositories declared via settings configuration.additionalRepositories
-    # - ${{ each repo in parameters.configuration.additionalRepositories }}:
-    #   - repository: ${{ repo.alias }}
-    #     type: git
-    #     name: ${{ repo.name }}
-    #     ref: ${{ repo.ref }}
+      ref: 'refs/heads/main'
 
-# extends:
-#   template: templates/main.yml@PipelineCommon
-#   parameters:
-#     configuration: ${{ parameters.configuration }}
+extends:
+  template: templates/main.yml@PipelineCommon
+  parameters:
+    configuration: ${{ parameters.configuration }}
