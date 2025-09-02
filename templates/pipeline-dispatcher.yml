@@ -14,11 +14,11 @@ resources:
       name: wesley-trust/pipeline-common
       ref: ${{ parameters.pipelineCommonRef }}
     # Additional repositories declared via settings configuration.additionalRepositories
-    - ${{ each repo in parameters.configuration.additionalRepositories }}:
-      - repository: ${{ repo.alias }}
-        type: git
-        name: ${{ repo.name }}
-        ref: ${{ repo.ref }}
+    # - ${{ each repo in parameters.configuration.additionalRepositories }}:
+    #   - repository: ${{ repo.alias }}
+    #     type: git
+    #     name: ${{ repo.name }}
+    #     ref: ${{ repo.ref }}
 
 extends:
   template: templates/main.yml@PipelineCommon
