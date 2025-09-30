@@ -9,8 +9,7 @@ resources:
       type: github
       endpoint: wesley-trust
       name: wesley-trust/pipeline-common
-      ref: 'refs/heads/feature/var-refactor'
-      #ref: 'refs/heads/main'
+      ref: 'refs/heads/main'
 
 extends:
   template: templates/main.yml@PipelineCommon
