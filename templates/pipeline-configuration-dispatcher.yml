@@ -86,7 +86,8 @@ extends:
   parameters:
     configuration:
       ${{ each config in parameters.configurationDefaults }}:
-        ${{ config.key }}: ${{ config.value }}
+        ${{ if eq(coalesce(parameters.configuration[config.key], ''), '') }}:
+          ${{ config.key }}: ${{ config.value }}
       ${{ each config in parameters.configuration }}:
         ${{ if ne(config.value, '') }}:
           ${{ config.key }}: ${{ config.value }}
