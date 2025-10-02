@@ -1,0 +1,103 @@
+parameters:
+  - name: configuration
+    type: object
+    default: {}
+  - name: configurationDefaults
+    type: object
+    default:
+      defaultPool:
+        vmImage: "ubuntu-latest"
+      serviceConnection: serviceConnection
+      actionGroups: []
+      enableProduction: false
+      runReviewStage: true
+      drInvocation: false
+      variableRoot: vars
+      variables:
+        includeCommon: true
+        includeEnv: true
+        includeEnvRegion: false
+        includeRegion: true
+      variableGroups:
+        - "Common-Variables"
+      validation:
+        enableVariableIncludes: true
+      additionalRepositories: []
+      keyVault:
+        name: ""
+        secretsFilter: ""
+  - name: skipEnvironments
+    type: object
+    default:
+      dev: false
+      qa: false
+      ppr: false
+  - name: environments
+    type: object
+    default:
+      - name: dev
+        class: development
+        dependsOnSecondaryRegions: false
+        primaryRegion: weu
+        secondaryRegions:
+          - neu
+        drRegion: neu
+        allowedBranches:
+          - "*"
+        pool:
+          vmImage: "ubuntu-latest"
+        poolRegionDemand: false
+      - name: qa
+        class: test
+        dependsOnSecondaryRegions: false
+        primaryRegion: weu
+        allowedBranches:
+          - "feature/*"
+          - "release/*"
+        pool:
+          vmImage: "ubuntu-latest"
+        poolRegionDemand: false
+      - name: ppr
+        class: acceptance
+        dependsOnSecondaryRegions: false
+        primaryRegion: weu
+        secondaryRegions:
+          - neu
+        allowedBranches:
+          - "main"
+          - "release/*"
+        pool:
+          vmImage: "ubuntu-latest"
+        poolRegionDemand: false
+      - name: prd
+        class: production
+        primaryRegion: weu
+        secondaryRegions:
+          - neu
+        drRegion: neu
+        allowedBranches:
+          - "release/*"
+        pool:
+          vmImage: "ubuntu-latest"
+        poolRegionDemand: true
+
+extends:
+  template: /templates/pipeline-common-dispatcher.yml@PipelineDispatcher
+  parameters:
+    configuration:
+      ${{ each config in parameters.configurationDefaults }}:
+        ${{ if eq(coalesce(parameters.configuration[config.key], ''), '') }}:
+          ${{ config.key }}: ${{ config.value }}
+      ${{ each config in parameters.configuration }}:
+        ${{ if ne(config.value, '') }}:
+          ${{ config.key }}: ${{ config.value }}
+      environments:
+        - ${{ each env in parameters.environments }}:
+            - name: ${{ env.name }}
+              ${{ each property in env }}:
+                ${{ if ne(property.key, 'name') }}:
+                  ${{ property.key }}: ${{ property.value }}
+              ${{ if parameters.skipEnvironments[env.name] }}:
+                skipEnvironment: ${{ parameters.skipEnvironments[env.name] }}
+              ${{ else }}:
+                skipEnvironment: false
