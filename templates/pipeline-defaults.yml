@@ -63,7 +63,7 @@ extends:
       ${{ each parameter in parameters }}:
         ${{ if not(in(parameter.key, 'skip_environments', 'environments')) }}:
           ${{ parameter.key }}: ${{ parameter.value }}
-      ${{ if length(parameters.environments, 0) }}:
+      ${{ if ne(length(parameters.environments), 0) }}:
         environments:
           - name: dev
             class: development
