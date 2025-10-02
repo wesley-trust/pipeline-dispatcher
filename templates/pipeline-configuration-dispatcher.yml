@@ -92,12 +92,12 @@ extends:
         ${{ if ne(pair.value, '') }}:
           ${{ pair.key }}: ${{ pair.value }}
       environments:
-        ${{ each env in parameters.environments }}:
-          - name: ${{ env.name }}
-            ${{ each prop in env }}:
-              ${{ if ne(prop.key, 'name') }}:
-                ${{ prop.key }}: ${{ prop.value }}
-            ${{ if contains(parameters.skipEnvironments, env.name) }}:
-              skipEnvironment: ${{ parameters.skipEnvironments[env.name] }}
-            ${{ else }}:
-              skipEnvironment: false
+        - ${{ each env in parameters.environments }}:
+            - name: ${{ env.name }}
+              ${{ each prop in env }}:
+                ${{ if ne(prop.key, 'name') }}:
+                  ${{ prop.key }}: ${{ prop.value }}
+              ${{ if contains(parameters.skipEnvironments, env.name) }}:
+                skipEnvironment: ${{ parameters.skipEnvironments[env.name] }}
+              ${{ else }}:
+                skipEnvironment: false
