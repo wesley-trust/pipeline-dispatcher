@@ -76,7 +76,7 @@ extends:
               - "*"
             pool:
               vmImage: "ubuntu-latest"
-            skipEnvironment: ${{ parameters.skip_environments.dev }}
+            #skipEnvironment: ${{ parameters.skip_environments.dev }}
             poolRegionDemand: false
           - name: qa
             class: test
@@ -87,7 +87,7 @@ extends:
               - "release/*"
             pool:
               vmImage: "ubuntu-latest"
-            skipEnvironment: ${{ parameters.skip_environments.qa }}
+            #skipEnvironment: ${{ parameters.skip_environments.qa }}
             poolRegionDemand: false
           - name: ppr
             class: acceptance
@@ -100,7 +100,7 @@ extends:
               - "release/*"
             pool:
               vmImage: "ubuntu-latest"
-            skipEnvironment: ${{ parameters.skip_environments.ppr }}
+            #skipEnvironment: ${{ parameters.skip_environments.ppr }}
             poolRegionDemand: false
           - name: prd
             class: production
