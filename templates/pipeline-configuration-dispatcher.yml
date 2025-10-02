@@ -85,12 +85,18 @@ extends:
   template: /templates/pipeline-common-dispatcher.yml@PipelineDispatcher
   parameters:
     configuration:
-      ${{ if gt(length(parameters.configuration), 0) }}:
-        ${{ each pair in parameters.configuration }}:
-          ${{ pair.key }}: ${{ pair.value }}
       ${{ each pair in parameters.configurationDefaults }}:
-        ${{ if not(contains(parameters.configuration, pair.key)) }}:
+        ${{ pair.key }}: ${{ coalesce(parameters.configuration[pair.key], pair.value) }}
+      ${{ each pair in parameters.configuration }}:
+        ${{ if eq(parameters.configurationDefaults[pair.key], null) }}:
           ${{ pair.key }}: ${{ pair.value }}
+
+      # ${{ if gt(length(parameters.configuration), 0) }}:
+      #   ${{ each pair in parameters.configuration }}:
+      #     ${{ pair.key }}: ${{ pair.value }}
+      # ${{ each pair in parameters.configurationDefaults }}:
+      #   ${{ if not(contains(parameters.configuration, pair.key)) }}:
+      #     ${{ pair.key }}: ${{ pair.value }}
       environments:
         ${{ each env in parameters.environments }}:
           - name: ${{ env.name }}
