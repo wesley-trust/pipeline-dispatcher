@@ -89,7 +89,7 @@ extends:
         ${{ each pair in parameters.configuration }}:
           ${{ pair.key }}: ${{ pair.value }}
       ${{ each pair in parameters.configurationDefaults }}:
-        ${{ if not(containsValue(parameters.configuration, pair.key)) }}:
+        ${{ if not(contains(parameters.configuration, pair.key)) }}:
           ${{ pair.key }}: ${{ pair.value }}
       environments:
         ${{ each env in parameters.environments }}:
