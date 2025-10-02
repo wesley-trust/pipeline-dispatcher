@@ -86,11 +86,12 @@ extends:
   parameters:
     configuration:
       ${{ each pair in parameters.configurationDefaults }}:
-        ${{ pair.key }}: ${{ coalesce(parameters.configuration[pair.key], pair.value) }}
-      ${{ each pair in parameters.configuration }}:
-        ${{ if eq(parameters.configurationDefaults[pair.key], '') }}:
+        ${{ if eq(parameters.configuration[pair.key], '') }}:
           ${{ pair.key }}: ${{ pair.value }}
-  
+      ${{ each pair in parameters.configuration }}:
+        ${{ if ne(pair.value, '') }}:
+          ${{ pair.key }}: ${{ pair.value }}
+
       # ${{ if gt(length(parameters.configuration), 0) }}:
       #   ${{ each pair in parameters.configuration }}:
       #     ${{ pair.key }}: ${{ pair.value }}
