@@ -1,30 +1,43 @@
 # pipeline-dispatcher
 
-Dispatcher template for Azure DevOps pipelines that centralises the link between consumer repositories and the shared `pipeline-common` templates.
-It now also ships an opinionated default configuration so consumer pipelines can omit common boilerplate.
+Azure DevOps dispatcher templates that sit between consumer repositories and `pipeline-common`. The dispatcher keeps the consumer surface minimal while enforcing shared defaults and locking the `PipelineCommon` resource reference.
 
-## Purpose
-- Declares the `PipelineCommon` repository resource and locks the reference (branch/tag).
-- Re-extends `templates/main.yml@PipelineCommon`, forwarding the consumer-provided `configuration` object after applying defaults.
-- Keeps dispatcher logic isolated so consumers only manage their pipelines/settings files.
-- Supplies shared defaults (pool, service connection, variables, validation, etc.) when the consumer leaves values empty.
+## Quick Links
+- `AGENTS.md` – AI-facing handbook that explains how defaults merge and how configuration flows.
+- `wesley-trust/pipeline-common` – shared templates consumed by the dispatcher.
+- `wesley-trust/pipeline-examples` – end-to-end samples showing the required `*.pipeline.yml` and `*.settings.yml` pairing.
 
-## Files
-- `templates/pipeline-configuration-dispatcher.yml` – consumer entry point that merges `configurationDefaults` with the consumer-provided `configuration` object and exposes default environment metadata.
-- `templates/pipeline-common-dispatcher.yml` – intermediate template that locks the `pipeline-common` repository and forwards the composed configuration (`template: /templates/pipeline-common-dispatcher.yml@PipelineDispatcher`).
+## How It Works
+1. Consumer settings files extend `/templates/pipeline-configuration-dispatcher.yml@PipelineDispatcher`.
+2. That template merges `configurationDefaults` with the supplied `configuration` object and normalises environment metadata.
+3. It then re-extends `/templates/pipeline-common-dispatcher.yml@PipelineDispatcher`, which declares the `PipelineCommon` repository resource (locking `ref`) and calls `templates/main.yml@PipelineCommon` with the composed `configuration`.
+4. Downstream stages/jobs are owned by `pipeline-common`; consumers only manage parameters and action groups.
 
-## Default configuration
-- `configurationDefaults` seeds values for pool, service connection, action groups, validation flags, variable behaviour, additional repositories, and key vault metadata.
-- Defaults apply when a consumer omits a property or sets it to an empty string. Providing any other value overrides the default.
-- A baseline environment map (`dev`, `qa`, `ppr`, `prd`) is exposed. Consumers can override individual environments or toggle them off by setting `skipEnvironments.envName: true`.
+## Repository Layout
+- `templates/pipeline-configuration-dispatcher.yml` – consumer entry point responsible for default merging and schema alignment.
+- `templates/pipeline-common-dispatcher.yml` – intermediate template that declares the `PipelineCommon` resource and forwards configuration.
+- `README.md` / `AGENTS.md` – human- and AI-focused documentation.
 
-## Usage
-1. In the consumer repo, declare this dispatcher as a repository resource (see `wesley-trust/pipeline-examples`).
-2. Extend `/templates/pipeline-configuration-dispatcher.yml@PipelineDispatcher`, passing your `configuration` overrides only for values that differ from the defaults.
-3. Optionally adjust per-repository defaults (e.g. pool image, variable groups) by overriding `parameters.configurationDefaults`.
-4. Override or prune environments by supplying `parameters.environments` and/or `parameters.skipEnvironments`.
-5. Override the version of `pipeline-common` by setting `configuration.pipelineCommonRef`.
+## Defaults and Overrides
+- `parameters.configurationDefaults` seeds values such as agent pool, service connection, validation toggles, variable behaviour, additional repositories, and key vault metadata.
+- Consumers override defaults simply by providing a value in their `configuration` object; explicit empty strings revert to the default.
+- A baseline environment map (`dev`, `qa`, `ppr`, `prd`) is exposed. Consumers can adjust it via `parameters.environments` or disable environments with `parameters.skipEnvironments`.
+- To pin a different `pipeline-common` version, set `configuration.pipelineCommonRef` in the consumer settings file.
+
+## Consumer Workflow
+1. Declare the dispatcher repository resource in the consumer `*.settings.yml` file with the required service connection.
+2. Extend `/templates/pipeline-configuration-dispatcher.yml@PipelineDispatcher`, passing `parameters.configuration` that mirrors the schema described in `pipeline-common/docs/CONFIGURE.md`.
+3. Optionally override `parameters.configurationDefaults` or `parameters.environments` when the consumer needs non-standard defaults.
+4. Use pipeline parameters in `<service>.pipeline.yml` to control feature toggles (review, DR invocation, action enables) that flow into the configuration object.
+
+## Quality Checks
+- When defaults or schema change, run the preview scripts in `pipeline-common/tests` (see that repo’s README) to validate real Azure DevOps compilation with your branch.
+- Keep README/AGENTS aligned with template changes so service teams understand how to adopt new defaults.
+
+## Releasing Changes
+- Tag or branch this repository when shipping breaking changes so consumers can opt in via `configuration.pipelineCommonRef` safely.
+- Communicate updates through release notes that summarise new defaults, removed flags, or required consumer actions.
 
 ## Related Repositories
-- `wesley-trust/pipeline-common` – shared templates, steps, scripts, and documentation.
-- `wesley-trust/pipeline-examples` – end-to-end sample pipelines that demonstrate how to call this dispatcher.
+- `wesley-trust/pipeline-common` – shared pipeline implementation.
+- `wesley-trust/pipeline-examples` – sample consumers for onboarding new services.
