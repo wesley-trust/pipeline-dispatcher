@@ -107,4 +107,4 @@ extends:
               ${{ if parameters.skipRegions[primary] }}:
                 skipPrimaryRegion: ${{ parameters.skipRegions[primary] }}
               ${{ if parameters.skipRegions[secondary] }}:
-                skipSecondaryRegions: ${{ parameters.skipRegions[secondary] }}
+                skipSecondaryRegion: ${{ parameters.skipRegions[secondary] }}
