@@ -28,7 +28,15 @@ parameters:
         secretsFilter: ""
   - name: skipEnvironments
     type: object
-    default: {}
+    default:
+      dev: false
+      qa: false
+      ppr: false
+  - name: skipRegions
+    type: object
+    default:
+      primary: false
+      secondary: false
   - name: environments
     type: object
     default:
@@ -96,3 +104,7 @@ extends:
                   ${{ property.key }}: ${{ property.value }}
               ${{ if parameters.skipEnvironments[env.name] }}:
                 skipEnvironment: ${{ parameters.skipEnvironments[env.name] }}
+              ${{ if parameters.skipRegions[primary] }}:
+                skipPrimaryRegion: ${{ parameters.skipRegions[primary] }}
+              ${{ if parameters.skipRegions[secondary] }}:
+                skipSecondaryRegions: ${{ parameters.skipRegions[secondary] }}
