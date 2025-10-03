@@ -28,10 +28,7 @@ parameters:
         secretsFilter: ""
   - name: skipEnvironments
     type: object
-    default:
-      dev: false
-      qa: false
-      ppr: false
+    default: {}
   - name: environments
     type: object
     default:
@@ -99,5 +96,3 @@ extends:
                   ${{ property.key }}: ${{ property.value }}
               ${{ if parameters.skipEnvironments[env.name] }}:
                 skipEnvironment: ${{ parameters.skipEnvironments[env.name] }}
-              ${{ else }}:
-                skipEnvironment: false
