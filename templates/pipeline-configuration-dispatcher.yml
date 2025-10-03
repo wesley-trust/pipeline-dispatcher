@@ -105,6 +105,6 @@ extends:
               ${{ if parameters.skipEnvironments[env.name] }}:
                 skipEnvironment: ${{ parameters.skipEnvironments[env.name] }}
               ${{ if parameters.skipRegions[primary] }}:
-                skipPrimaryRegion: ${{ parameters.skipRegions[primary] }}
+                skipPrimaryRegion: ${{ parameters.skipRegions['primary'] }}
               ${{ if parameters.skipRegions[secondary] }}:
-                skipSecondaryRegion: ${{ parameters.skipRegions[secondary] }}
+                skipSecondaryRegion: ${{ parameters.skipRegions['secondary'] }}
