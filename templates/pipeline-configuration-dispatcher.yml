@@ -37,6 +37,9 @@ parameters:
     default:
       primary: false
       secondary: false
+  - name: globalDependsOn
+    type: string
+    default: ""
   - name: environments
     type: object
     default:
@@ -108,3 +111,5 @@ extends:
                 skipPrimaryRegion: ${{ parameters.skipRegions['primary'] }}
               ${{ if parameters.skipRegions['secondary'] }}:
                 skipSecondaryRegion: ${{ parameters.skipRegions['secondary'] }}
+              ${{ if parameters.globalDependsOn }}:
+                dependsOn: ${{ parameters.globalDependsOn }}
