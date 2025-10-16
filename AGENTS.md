@@ -13,7 +13,7 @@
 
 ## Defaults & Overrides
 - `configurationDefaults` seeds pools, service connections, validation toggles, tokens, additional repositories, and key vault metadata. Treat defaults as opinionated scaffolding – consumer configuration wins by simply providing a value.
-- Environments: the dispatcher exposes a baseline map (`dev`, `qa`, `ppr`, `prd`). Consumers can drop or override entries through their settings template parameters (`skipEnvironments`, `environments`).
+- Environments: the dispatcher exposes a baseline map (`dev`, `qa`, `ppr`, `prd`). Consumers can drop or override entries through their settings template parameters (`skipEnvironments`, `environments`), and can append an environment suffix by setting `configuration.pipelineType` (e.g. `AUTO` for automated lanes).
 - Locking refs: default ref is `refs/heads/main`. Consumers can pin a tag or branch via `configuration.pipelineCommonRef`. Keep release notes so teams know when to upgrade.
 
 ## Working with Consumers
