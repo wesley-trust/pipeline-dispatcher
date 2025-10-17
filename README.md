@@ -22,6 +22,7 @@ Azure DevOps dispatcher templates that sit between consumer repositories and `pi
 - `parameters.configurationDefaults` seeds values such as agent pool, service connection, validation toggles, variable behaviour, additional repositories, and key vault metadata.
 - Consumers override defaults simply by providing a value in their `configuration` object; explicit empty strings revert to the default.
 - A baseline environment map (`dev`, `qa`, `ppr`, `prd`) is exposed. Consumers can adjust it via `parameters.environments` or disable environments with `parameters.skipEnvironments`.
+- Region-level controls mirror that pattern: `parameters.skipRegions` suppresses primary and/or secondary region stages, while `parameters.globalDependsOn` injects a stage dependency (for example, forcing every environment to wait for the validation stage).
 - The dispatcher forwards optional `configuration.pipelineType`, enabling consumer pipelines to append suffixes (for example `-AUTO`) to Azure DevOps environment names when they represent automated lanes.
 - To pin a different `pipeline-common` version, set `configuration.pipelineCommonRef` in the consumer settings file.
 
