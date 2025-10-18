@@ -10,6 +10,7 @@
 - `templates/pipeline-configuration-dispatcher.yml` – merges `configurationDefaults` with the consumer-supplied `configuration`, exposes default environment metadata, and returns the object expected by `pipeline-common`.
 - `templates/pipeline-common-dispatcher.yml` – declares the `PipelineCommon` resource, locks the ref, and re-extends the shared main template.
 - `README.md` – summarises purpose, usage, and default behaviour. Update alongside template changes.
+- `scripts/release_semver.ps1` – semantic-release helper used by the release pipeline (calculates the next version, tags the repo, and exports release metadata).
 
 ## Defaults & Overrides
 - `configurationDefaults` seeds pools, service connections, validation toggles, tokens, additional repositories, and key vault metadata. Treat defaults as opinionated scaffolding – consumer configuration wins by simply providing a value.

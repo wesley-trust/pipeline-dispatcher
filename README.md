@@ -6,6 +6,7 @@ Azure DevOps dispatcher templates that sit between consumer repositories and `pi
 - `AGENTS.md` – AI-facing handbook that explains how defaults merge and how configuration flows.
 - `wesley-trust/pipeline-common` – shared templates consumed by the dispatcher.
 - `wesley-trust/pipeline-examples` – end-to-end samples showing the required `*.pipeline.yml` and `*.settings.yml` pairing.
+- `pipeline/pipeline-dispatcher.release.pipeline.yml` – semantic-release pipeline for this repository.
 
 ## How It Works
 1. Consumer settings files extend `/templates/pipeline-configuration-dispatcher.yml@PipelineDispatcher`.
