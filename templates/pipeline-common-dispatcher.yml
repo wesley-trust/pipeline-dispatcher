@@ -9,7 +9,7 @@ resources:
       type: github
       endpoint: wesley-trust
       name: wesley-trust/pipeline-common
-      ref: "refs/tags/v1.2.0"
+      ref: "refs/tags/v1.2.3"
 
 extends:
   template: templates/main.yml@PipelineCommon
